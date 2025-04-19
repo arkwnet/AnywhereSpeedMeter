@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">どこでも速度計</string>
+    <string name="text_empty">0</string>
+    <string name="text_speed">km/h</string>
+    <string name="text_latitude">緯度</string>
+    <string name="text_longitude">経度</string>
+    <string name="alert_permission">位置情報の権限が必要です。アプリを再起動し、表示されるダイアログで位置情報の利用を許可してください。</string>
 </resources>
