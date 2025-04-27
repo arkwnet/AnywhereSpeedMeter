@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onLocationResult(@NonNull LocationResult locationResult) {
                     for (Location location : locationResult.getLocations()) {
-                        locationSpeed = (int)Math.floor(location.getSpeed());
+                        locationSpeed = (int)Math.floor(location.getSpeed() * 3.6f);
                         textViewLatitude.setText(String.format("%.07f", location.getLatitude()));
                         textViewLongitude.setText(String.format("%.07f", location.getLongitude()));
                     }
