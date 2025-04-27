@@ -26,11 +26,18 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainActivity extends AppCompatActivity {
     private boolean permission = false;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
     private FusedLocationProviderClient fusedLocationProviderClient;
+    private int locationSpeed = 0;
+    private int displaySpeed = 0;
+    private Timer timer;
+    private TimerTask timerTask;
     private TextView textViewSpeed;
     private TextView textViewLatitude;
     private TextView textViewLongitude;
@@ -73,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onLocationResult(@NonNull LocationResult locationResult) {
                     for (Location location : locationResult.getLocations()) {
-                        textViewSpeed.setText("" + (int)Math.floor(location.getSpeed()));
+                        locationSpeed = (int)Math.floor(location.getSpeed());
                         textViewLatitude.setText(String.format("%.07f", location.getLatitude()));
                         textViewLongitude.setText(String.format("%.07f", location.getLongitude()));
                     }
@@ -81,6 +88,23 @@ public class MainActivity extends AppCompatActivity {
             };
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
             fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+            timer = new Timer();
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    if (displaySpeed - locationSpeed > 5) {
+                        displaySpeed = locationSpeed + 5;
+                    } else if (displaySpeed - locationSpeed < -5) {
+                        displaySpeed = locationSpeed - 5;
+                    } else if (displaySpeed > locationSpeed) {
+                        displaySpeed--;
+                    } else if (displaySpeed < locationSpeed) {
+                        displaySpeed++;
+                    }
+                    textViewSpeed.setText("" + displaySpeed);
+                }
+            };
+            timer.schedule(timerTask, 0, 100);
         }
     }
 
